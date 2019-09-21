@@ -17,7 +17,6 @@ Last Modified: September 21, 2019
 import argparse
 import util
 import matplotlib.pyplot as plt
-import numpy
 
 
 def letter_frequency(word_dict: dict) -> dict:
@@ -102,7 +101,7 @@ def main() -> None:
         if args.plot:
 
             # Creates a sorted number representation of the keys of letter_frequencies
-            index = numpy.arange(len(letter_frequencies.keys()))
+            index = range(len(letter_frequencies.keys()))
 
             # Creates a bar graph with index as the x axis, values of letter_frequencies (rates) as the y axis,
             # a clue color with a black edge, with a width of 1, no x axis margins, and a slight y axis margin
