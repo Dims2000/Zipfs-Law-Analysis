@@ -14,10 +14,10 @@ Last Modified: September 20, 2019
 
 import argparse
 import sys
-import helper_functions
+import util
 
 
-def main():
+def main() -> None:
     """
     Parses a given .csv file and returns the number of time a
     user-given word appears in the file
@@ -41,18 +41,16 @@ def main():
 
     # Utilizes a helper function that reads a file and returns a dictionary with words
     # as keys and a list of tuples that contain the year and usage as internal variables
-    words_dict = helper_functions.read_file(args.filename)
-
-    # Uses a helper function that takes a List as a parameter (in this case, the value of
-    # the user-given word) and returns its total number of occurrences (aka its usage)
-    word_count = helper_functions.total_words(words_dict[word])
+    words_dict = util.read_file(args.filename)
 
     # If a particular word does not exist in the file, a standard error message is displayed and the program is terminated
-    if word_count == 0:
+    if word not in words_dict:
         sys.stderr.write("Error: " + word + " does not appear!\n")
         exit(2)
 
-    print(word + ": " + str(word_count))
+    # Uses a helper function that takes a List as a parameter (in this case, the value of
+    # the user-given word) and returns its total number of occurrences (aka its usage)
+    print(word + ": " + str(util.total_words(words_dict[word])))
 
 
 if __name__ == '__main__':
