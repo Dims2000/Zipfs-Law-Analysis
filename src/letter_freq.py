@@ -15,7 +15,7 @@ Last Modified: September 21, 2019
 """
 
 import argparse
-import helper_functions
+import util
 import matplotlib.pyplot as plt
 import numpy
 
@@ -44,7 +44,7 @@ def letter_frequency(word_dict: dict) -> dict:
     # Iterates through every word in word_list, calls a helper function to determine the number of occurrences
     # for each word, and adds that number multiplied by the number of letters in word to num_of_letters
     for word in word_list:
-        num_of_words = int(helper_functions.total_words(word_dict[word]))
+        num_of_words = int(util.total_words(word_dict[word]))
         num_of_letters += len(word) * num_of_words
 
         # Iterates through every every letter in word by iterating through its number index and adds
@@ -83,7 +83,7 @@ def main() -> None:
 
     # Parses the arguments into args and creates a dictionary of filename using the helper function, read_file
     args = parser.parse_args()
-    word_dict = helper_functions.read_file(args.filename)
+    word_dict = util.read_file(args.filename)
 
     # Checks if the user has requested a plot or a console output of the data, otherwise do nothing
     if args.plot or args.output:
@@ -105,16 +105,18 @@ def main() -> None:
             index = numpy.arange(len(letter_frequencies.keys()))
 
             # Creates a bar graph with index as the x axis, values of letter_frequencies (rates) as the y axis,
-            # a clue color with a black edge, with a width of 1, and no margins
+            # a clue color with a black edge, with a width of 1, no x axis margins, and a slight y axis margin
             plt.bar(index, letter_frequencies.values(), color="blue", edgecolor="black", linewidth=1, width=1)
-            plt.margins(0)
+            plt.margins(0, 0.05)
 
             # Sets the x and y axis labels and the title
             plt.xlabel("Letter"), plt.ylabel("Frequency")
             plt.title("Letter Frequencies: " + args.filename)
 
-            # Creates ticks for the x axis for each letter (key) in letter_frequencies and displays the graph
+            # Creates ticks for the x axis for each letter (key) in letter_frequencies,
+            # includes ticks for the top and right of the graph, and displays the graph
             plt.xticks(index, letter_frequencies.keys())
+            plt.tick_params(direction="in", top=True, right=True)
             plt.show()
 
 
