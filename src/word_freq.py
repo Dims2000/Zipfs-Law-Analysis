@@ -33,7 +33,7 @@ def word_frequency(word_dict: dict) -> [tuple]:
 
     # Creates a list with tuples out of word_dict, where the first element in the tuple is a word
     # and the second element is the total number of occurrences for the corresponding word (total_words)
-    word_usage_list = [(word, util.total_words(tup)) for (word, tup) in word_dict.items()]
+    word_usage_list = [(word, util.total_words(usage)) for (word, usage) in word_dict.items()]
 
     # Sorts the list based on the values in the second element (usage) in each tuple, and reverses the list
     # (to ensure that the words with the most occurrences appear at the front of the list)
@@ -89,10 +89,14 @@ def main() -> None:
     # Sets rank_of_word to the index of the tuple word is part of in word_usage_list
     rank_of_word = str(word_usage_list.index((word, util.total_words(word_dict[word]))) + 1)
 
+    # Sets usage_of_word_to the total number of occurrences
+    usage_of_word = int(util.total_words(word_dict[word]))
+
     # Prints the rank of word
     print(word + " is ranked #" + rank_of_word)
 
     # Iterates through the elements of word_usage_list and prints the elements from 0 to limit
+    # index of 0 = word, index 1 = total number of occurrences
     for index in range(limit):
         print("#" + str(index + 1) + ": " + word_usage_list[index][0] + " -> " + str(word_usage_list[index][1]))
 
@@ -115,9 +119,8 @@ def main() -> None:
         plt.scatter(index[1:-1], [usage for word, usage in word_usage_list[1:-1]], s=10, color="blue")
 
         # Creates a marker and label for the user-chosen word in the graph (red star)
-        plt.scatter(int(rank_of_word), util.total_words(word_dict[word]), color="red", s=110, marker="*", zorder=7, edgecolors="black")
-        plt.text(int(rank_of_word) + float(0.04 * float(rank_of_word)), util.total_words(word_dict[word]) +
-                 float(0.09 * float(util.total_words(word_dict[word]))), word, fontsize=9)
+        plt.scatter(int(rank_of_word), usage_of_word, color="red", s=110, marker="*", zorder=7, edgecolors="black")
+        plt.text(int(rank_of_word) + float(0.04 * float(rank_of_word)), usage_of_word + float(0.09 * usage_of_word), word, fontsize=9)
 
         # Sets the ticks of the graph to face inwards and appear on the top and right of the graph
         plt.tick_params(axis="both", direction="in", top=True, right=True, width=0.5)
