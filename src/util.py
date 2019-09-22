@@ -39,8 +39,8 @@ def read_file(filename: str) -> dict:
         sys.stderr.write("Error: " + filename + " does not exist!\n")
         exit(1)
 
-    # Initializes Word (for better readability) and occurrences (the dictionary that will be returned)
-    Word = collections.namedtuple("Occurrence", ("word", "year", "usage"))
+    # Initializes Usage (for better readability) and occurrences (the dictionary that will be returned)
+    Usage = collections.namedtuple("Usage", ("year", "occurrence"))
     occurrences = {}
 
     # Iterates through each line in file
@@ -49,16 +49,17 @@ def read_file(filename: str) -> dict:
         # Splits line into its 3 components (parses by commas) and strips any excess whitespace
         components = line.strip().split(',')
 
-        # Creates a Word tuple, entry, with the 3 components as parameters (component[0] is set to lowercase for consistency)
+        # Creates a Usage tuple, entry, with the 2 components as parameters
         # components[0] = word, components[1] = year, components[2] = number of occurrences
-        entry = Word(components[0].strip().lower(), components[1].strip(), components[2].strip())
+        entry = Usage(components[1].strip(), components[2].strip())
+        word = components[0].strip().lower()
 
         # If the word is already a key, append its year and usage to its value list as a tuple,
         # otherwise, simply add a new entry to occurrences
-        if entry.word in occurrences:
-            occurrences[entry.word].append((entry.year, entry.usage))
+        if word in occurrences:
+            occurrences[word].append(entry)
         else:
-            occurrences[entry.word] = [(entry.year, entry.usage)]
+            occurrences[word] = [entry]
 
     return occurrences
 
@@ -80,6 +81,6 @@ def total_words(target_word: List) -> int:
     # Iterates through each listing of a word occurrence in target_word and adds the second element
     # (the word usage) to word_count
     for listing in target_word:
-        word_count += int(listing[1])
+        word_count += int(listing.occurrence)
 
     return word_count
