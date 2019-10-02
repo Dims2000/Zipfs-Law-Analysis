@@ -37,8 +37,7 @@ def word_frequency(word_dict: dict) -> [tuple]:
 
     # Sorts the list based on the values in the second element (usage) in each tuple, and reverses the list
     # (to ensure that the words with the most occurrences appear at the front of the list)
-    word_usage_list.sort(key=lambda tup: tup[1])
-    word_usage_list.reverse()
+    word_usage_list.sort(key=lambda tup: tup[1], reverse=True)
 
     return word_usage_list
 
@@ -70,7 +69,7 @@ def main() -> None:
     # and uses a helper function, read_file, to create a dictionary of words out of file, filename
     args = parser.parse_args()
     filename = args.filename
-    output = args.output
+    output = 0 if args.output is None else args.output
     word = args.word
     word_dict = util.read_file(filename)
 
@@ -111,7 +110,7 @@ def main() -> None:
         plt.loglog(index, [usage for word, usage in word_usage_list], color="green", linewidth=0.75)
 
         # Creates x and y axis labels, the graph title, and sets the margins of the graph to 0
-        plt.xlabel('Rank of word ("' + word + '" is ranked ' + rank_of_word + ')'), plt.ylabel("Total number of occurrences")
+        plt.xlabel('Rank of word ("' + word + '" is ranked ' + rank_of_word + ')'), plt.ylabel("Frequency")
         plt.title("Word Frequencies: " + filename.split("/")[1])
         plt.margins(0)
 
