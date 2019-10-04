@@ -15,7 +15,6 @@ Last Modified: September 22, 2019
 
 import argparse
 import matplotlib.pyplot as plt
-import numpy
 import util
 import sys
 
@@ -59,7 +58,12 @@ def averages(word_dict: dict, start: int, end: int) -> dict:
                 average_word_len[year] = (word_weight, num_of_words, (word_weight / num_of_words))
 
     # Creates a dictionary from average_word_len using only the last element if each value as the only value for each year
-    word_averages = {key: average_word_len[key][2] for key in average_word_len.keys()}
+
+    word_averages = {}
+
+    for key in average_word_len.keys():
+        if average_word_len[key][2] > 0:
+            word_averages[int(key)] = average_word_len[key][2]
 
     return word_averages
 
@@ -109,35 +113,24 @@ def main() -> None:
         # if the user requested for console output, print the data from word_averages
         if args.output:
             for key in word_averages:
-                print(key + ": " + str(word_averages[key]))
+                print(str(key) + ": " + str(word_averages[key]))
 
         # If a plot was requested, then run the following script
         if args.plot:
 
-            # Creates a list of numbers from 0 to the length of word_averages
-            index = range(len(word_averages))
-
-            # Creates plot with index as the x axis and the corresponding values in word_averages as the y axis
-            plt.plot(index, word_averages.values(), color="blue", linewidth=0.75)
+            # Creates plot with word_averages keys as the x axis and the corresponding values in word_averages as the y axis
+            plt.plot(word_averages.keys(), word_averages.values(), color="blue", linewidth=0.75)
 
             # Sets the x and y labels, as well as the title for the graph
             plt.xlabel("Year"), plt.ylabel("Average word length")
             plt.title("Average word lengths from " + str(start) + " to " + str(end) + ": " + filename.split("/")[1])
 
-            # tick_step and extra_tick are numbers that help to correctly format the ticks in the x axis
-            tick_step = len(word_averages) // 7 if len(word_averages) > 7 else 1
-            extra_tick = tick_step % 7 if len(word_averages) > 7 else 0
-
-            # Extends the limit of the x axis if the data does not fit evenly
-            if extra_tick != 0:
-                plt.xlim(0, len(word_averages) + extra_tick)
-
-            # Correctly formats the x ticks
-            plt.xticks(numpy.arange(0, len(word_averages) + tick_step, tick_step), range(start, end + tick_step, tick_step))
-
             # Sets so that ticks show up on the top and right of the graph and to include a slight y axis margin
             plt.tick_params(direction="in", top=True, right=True)
             plt.margins(0, 0.2)
+
+            # Sets the x axis margins
+            plt.xlim(start, end + (len(word_averages) * 0.1))
 
             # Displays the plot
             plt.show()
