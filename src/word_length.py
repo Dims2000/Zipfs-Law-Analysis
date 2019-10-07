@@ -57,11 +57,12 @@ def averages(word_dict: dict, start: int, end: int) -> dict:
                 # Updates the values for year in average_word_len (the final element is the current word average for year)
                 average_word_len[year] = (word_weight, num_of_words, (word_weight / num_of_words))
 
-    # Creates a dictionary from average_word_len using only the last element if each value as the only value for each year
-
     word_averages = {}
 
+    # Creates a dictionary from average_word_len using only the last element of each value as the only value
     for key in average_word_len.keys():
+
+        # Filters any years that do not have data
         if average_word_len[key][2] > 0:
             word_averages[int(key)] = average_word_len[key][2]
 
